@@ -31,7 +31,7 @@ const singleUpdate: RequestHandler = catchAsync(
     const userData = req.body;
     const result = await UserService.singleUpdateById(id, userData);
 
-    sendResponse<IUser | ICard | UpdateWriteOpResult>(res, {
+    sendResponse<IUser | UpdateWriteOpResult>(res, {
       statusCode: httpStatus.OK,
       success: true,
       message: 'user retrieved successfully!',
@@ -40,7 +40,23 @@ const singleUpdate: RequestHandler = catchAsync(
   }
 );
 
+const deleteUserById: RequestHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    const result = await UserService.deleteUserById(id);
+
+    sendResponse<IUser | UpdateWriteOpResult>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'user delete successfully!',
+      data: result,
+    });
+  }
+);
+
 export const UserController = {
   getAllUser,
   singleUpdate,
+  deleteUserById,
 };

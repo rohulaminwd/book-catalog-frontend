@@ -5,7 +5,7 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { userSearchableFields } from './user.constant';
-import { ICard, IPlan, IUser, IUserFilters } from './user.interface';
+import { IUser, IUserFilters } from './user.interface';
 import { User } from './user.model';
 
 const getAllUser = async (
@@ -62,8 +62,8 @@ const getAllUser = async (
 
 const singleUpdateById = async (
   Id: string,
-  data: Partial<IUser> | ICard
-): Promise<IUser | ICard | UpdateWriteOpResult> => {
+  data: Partial<IUser>
+): Promise<IUser | UpdateWriteOpResult> => {
   const me: IUser | null = await User.findOne({ _id: Id });
   if (!me) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'User not find');
@@ -76,90 +76,6 @@ const singleUpdateById = async (
   );
 
   return result;
-};
-
-const cardSetAndUpdate = async (Id: string, data: ICard): Promise<IUser> => {
-  const me: IUser | null = await User.findOne({ _id: Id });
-
-  if (!me) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
-  }
-
-  if (data.cardName) {
-    const existCard = me.card?.find((i: ICard) => i.cardName === data.cardName);
-
-    if (existCard) {
-      await User.updateOne(
-        { _id: Id, 'card._id': existCard._id },
-        {
-          $set: {
-            'card.$.cardName': data.cardName,
-            'card.$.cardNum': data.cardNum,
-          },
-        },
-        { new: true, upsert: true }
-      );
-    } else {
-      await User.findByIdAndUpdate(
-        Id,
-        {
-          $push: {
-            card: data,
-          },
-        },
-        { new: true, upsert: true }
-      );
-    }
-
-    // Fetch the updated user data
-    const updatedUser: IUser | null = await User.findOne({ _id: Id });
-    if (!updatedUser) {
-      throw new ApiError(
-        httpStatus.INTERNAL_SERVER_ERROR,
-        'Failed to updated card'
-      );
-    }
-    return updatedUser;
-  } else {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Please provide valid data');
-  }
-};
-
-const planActiveAndUpdate = async (Id: string, data: IPlan): Promise<IUser> => {
-  const me: IUser | null = await User.findOne({ _id: Id });
-
-  if (!me) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'User not found');
-  }
-
-  const price = me?.balance - data?.price;
-
-  if (data.planId) {
-    await User.findByIdAndUpdate(
-      Id,
-      {
-        $push: {
-          plan: data,
-        },
-        $set: {
-          balance: price,
-        },
-      },
-      { new: true, upsert: true }
-    );
-
-    // Fetch the updated user data
-    const updatedUser: IUser | null = await User.findOne({ _id: Id });
-    if (!updatedUser) {
-      throw new ApiError(
-        httpStatus.INTERNAL_SERVER_ERROR,
-        'Failed to updated card'
-      );
-    }
-    return updatedUser;
-  } else {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Please provide valid data');
-  }
 };
 
 const deleteUserById = async (id: string): Promise<any> => {
@@ -175,6 +91,4 @@ export const UserService = {
   getAllUser,
   singleUpdateById,
   deleteUserById,
-  cardSetAndUpdate,
-  planActiveAndUpdate,
 };
