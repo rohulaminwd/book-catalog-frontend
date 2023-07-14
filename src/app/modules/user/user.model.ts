@@ -13,8 +13,6 @@ const UserSchema = new Schema<IUser, UserModel>(
         validator.isMobilePhone,
         'Please provide a valid contact number',
       ],
-      unique: true,
-      required: [true, 'Phone Number is required'],
     },
 
     email: {
@@ -23,12 +21,7 @@ const UserSchema = new Schema<IUser, UserModel>(
       lowercase: true,
       unique: true,
       sparse: true,
-    },
-
-    ipAddress: {
-      type: String,
-      required: true,
-      unique: true,
+      required: [true, 'Email is required'],
     },
 
     name: {
@@ -74,42 +67,6 @@ const UserSchema = new Schema<IUser, UserModel>(
       type: String,
       validate: [validator.isURL, 'Please provide a valid url'],
     },
-    balance: {
-      type: Number,
-      default: 0,
-      min: [0, "Product price can't be negative"],
-    },
-    referCode: {
-      type: String,
-    },
-    myReferralCode: {
-      type: String,
-    },
-    card: [
-      {
-        cardNum: { type: String },
-        cardName: { type: String },
-      },
-    ],
-    plan: [
-      {
-        status: {
-          type: String,
-          enum: ['active', 'inactive'],
-          default: 'active',
-        },
-        price: { type: Number },
-        planId: {
-          type: Schema.Types.ObjectId,
-          ref: 'Plan',
-        },
-        planDuration: { type: String },
-        date: { type: String },
-      },
-      {
-        timestamps: true,
-      },
-    ],
   },
   {
     timestamps: true,
