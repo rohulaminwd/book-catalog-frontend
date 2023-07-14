@@ -42,6 +42,6 @@ const BookSchema = new Schema<IBook, BookModel>(
   }
 );
 
-const Plan = model<IBook, BookModel>('book', BookSchema);
+const Book = model<IBook, BookModel>('book', BookSchema);
 
-export default Plan;
+export default Book;
