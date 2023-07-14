@@ -17,7 +17,7 @@ export type IBook = {
   review: IReview[];
 };
 
-export type PlanModel = Model<IBook, Record<string, unknown>>;
+export type BookModel = Model<IBook, Record<string, unknown>>;
 
 export type IBookFilters = {
   searchTerm?: string;
