@@ -9,6 +9,7 @@ export type IReview = {
 };
 
 export type IBook = {
+  save(): unknown;
   title?: string;
   author: Types.ObjectId | IUser;
   publicationDate: string;

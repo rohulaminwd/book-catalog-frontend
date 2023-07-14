@@ -1,5 +1,6 @@
 import { UpdateWriteOpResult } from 'mongoose';
 import { IBook } from './book.interface';
+import Book from './book.model';
 
 const createBook = async (TaskInfo: IBook): Promise<IBook> => {
   const request = await Book.create(TaskInfo);
@@ -7,7 +8,7 @@ const createBook = async (TaskInfo: IBook): Promise<IBook> => {
 };
 
 const getAllBook = async (): Promise<IBook[]> => {
-  const request = await Plan.find({});
+  const request = await Book.find({});
   return request;
 };
 
@@ -15,7 +16,7 @@ const updateBook = async (
   Id: string,
   data: IBook
 ): Promise<UpdateWriteOpResult> => {
-  const result = await Plan.updateOne(
+  const result = await Book.updateOne(
     { _id: Id },
     { $set: data },
     { new: true, upsert: true }
@@ -25,7 +26,7 @@ const updateBook = async (
 };
 
 const deleteBook = async (id: string): Promise<any> => {
-  const result = await Plan.deleteOne({ _id: id });
+  const result = await Book.deleteOne({ _id: id });
   return result;
 };
 
