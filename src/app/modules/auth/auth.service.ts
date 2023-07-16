@@ -12,13 +12,6 @@ import {
 } from './auth.interface';
 
 const signUp = async (userData: IUser): Promise<IUser | null> => {
-  const ipUser = await User.findOne({ ipAddress: userData.ipAddress });
-  if (ipUser) {
-    throw new ApiError(
-      httpStatus.BAD_REQUEST,
-      'Alredy create account this device, plz choose another device'
-    );
-  }
   const user = await User.create(userData);
   return user;
 };
@@ -83,20 +76,20 @@ const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
 
   //create access token & refresh token
 
-  const { role, phoneNumber } = isUserExist;
+  const { role, email } = isUserExist;
   const accessToken = jwtHelpers.createToken(
-    { role, phoneNumber },
+    { role, email },
     config.jwt.secret as Secret,
     config.jwt.expires_in as string
   );
 
   const refreshToken = jwtHelpers.createToken(
-    { role, phoneNumber },
+    { role, email },
     config.jwt.refresh_secret as Secret,
     config.jwt.refresh_expires_in as string
   );
 
-  const user = await User.findOne({ phoneNumber });
+  const user = await User.findOne({ email });
 
   return {
     accessToken,
@@ -129,7 +122,7 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
 
   const newAccessToken = jwtHelpers.createToken(
     {
-      id: isUserExist.phoneNumber,
+      id: isUserExist.email,
       role: isUserExist.role,
     },
     config.jwt.secret as Secret,

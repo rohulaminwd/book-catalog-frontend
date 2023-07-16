@@ -14,8 +14,8 @@ export type IUser = {
   status: 'active' | 'inactive' | 'block';
   password: string;
   gender?: 'male' | 'female';
-  email?: string;
-  phoneNumber: string;
+  email: string;
+  phoneNumber?: string;
   address?: string;
   imageURL?: string;
 };

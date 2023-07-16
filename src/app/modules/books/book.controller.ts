@@ -14,7 +14,7 @@ const createBook: RequestHandler = catchAsync(
     sendResponse<IBook>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Plan created successfully!',
+      message: 'Book created successfully!',
       data: result,
     });
   }
@@ -27,7 +27,7 @@ const getBook: RequestHandler = catchAsync(
     sendResponse<IBook[]>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Plan retrieved successfully!',
+      message: 'Book retrieved successfully!',
       data: result,
     });
   }
@@ -36,11 +36,25 @@ const getBook: RequestHandler = catchAsync(
 const updateBookById: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     const { id } = req.params;
+    console.log(id, req.body);
     const result = await BookService.updateBook(id, req.body);
     sendResponse<UpdateWriteOpResult>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'Plan retrieved successfully!',
+      message: 'book retrieved successfully!',
+      data: result,
+    });
+  }
+);
+
+const addReview: RequestHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await BookService.addReview(id, req.body);
+    sendResponse<UpdateWriteOpResult>(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Review add successfully!',
       data: result,
     });
   }
@@ -55,7 +69,7 @@ const deleteBookById: RequestHandler = catchAsync(
     sendResponse<IBook>(res, {
       statusCode: httpStatus.OK,
       success: true,
-      message: 'plan delete successfully!',
+      message: 'book delete successfully!',
       data: result,
     });
   }
@@ -66,4 +80,5 @@ export const bookController = {
   getBook,
   deleteBookById,
   updateBookById,
+  addReview,
 };

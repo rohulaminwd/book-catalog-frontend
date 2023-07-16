@@ -3,11 +3,9 @@ import { bookController } from './book.controller';
 const router = express.Router();
 
 router.post('/create', bookController.createBook);
+router.patch('/:id', bookController.updateBookById);
+router.post('/review/:id', bookController.addReview);
 router.get('/', bookController.getBook);
-
-router
-  .route('/:id')
-  .patch(bookController.updateBookById)
-  .delete(bookController.deleteBookById);
+router.delete('/:id', bookController.deleteBookById);
 
 export const BookRoutes = router;

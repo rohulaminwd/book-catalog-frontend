@@ -10,7 +10,7 @@ import { AuthService } from './auth.service';
 const signUp: RequestHandler = catchAsync(
   async (req: Request, res: Response) => {
     const userData = req.body;
-
+    console.log(userData);
     const result = await AuthService.signUp(userData);
 
     sendResponse<IUser>(res, {

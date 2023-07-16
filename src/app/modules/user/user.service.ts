@@ -45,7 +45,6 @@ const getAllUser = async (
     andConditions.length > 0 ? { $and: andConditions } : {};
 
   const result = await User.find(whereConditions)
-    .populate('plan')
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
